@@ -25,8 +25,8 @@ namespace Game
             ClientSize = new Size(1280, 640);
             var Width = ClientSize.Width / 64;
             var Height = ClientSize.Height / 64; 
-            var X = 64;
-            var Y = 64;
+            var X = 32;
+            var Y = 32;
             var speedTop = 0;
             var speedBottom = 0;
             String side = "Forward";
