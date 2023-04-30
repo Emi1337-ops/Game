@@ -5,6 +5,8 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
+
 
 namespace Game
 {
@@ -14,6 +16,7 @@ namespace Game
         public int Y;
         public string Direction;
 
+        public int Damage;
         private readonly int MaxHp = 100;
         private readonly int MaxAmmo = 30;
 
@@ -48,13 +51,14 @@ namespace Game
         public bool GoLeft;
 
         #region Player
-        public Player(int x, int y, string direction)
+        public Player(int x, int y, string direction, int damage)
         {
             Hp = 100;
             Ammo = 30;
             X = x;
             Y = y;
             Direction = direction;
+            Damage = damage;
         }
         #endregion
 
@@ -97,16 +101,16 @@ namespace Game
             if (Ammo > 0)
             {
                 game.BulletList.
-                        Add(new Bullet(X + game.BlockSize / 2, Y + game.BlockSize / 2 - 13, Direction));
+                        Add(game.GetBulletFirePosition(new Point(X, Y), Direction, Damage));
                 Ammo--;
             };
         }
         #endregion
 
         #region Damage
-        public void Damage(Game game, int damage)
+        public void GetDamage()
         {
-            Hp -= damage;
+            Hp -= 10;
             if (Hp <= 0)
             {
                 Death();

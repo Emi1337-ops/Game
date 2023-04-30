@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
@@ -12,14 +13,16 @@ namespace Game
         public int X;
         public int Y;
         public readonly string Direction;
+        public int Damage;
         public bool RemoveFlag;
 
-        public Bullet(int x, int y, string direction)
+        public Bullet(int x, int y, string direction,int damage)
         {
             RemoveFlag = false;
             X = x;
             Y = y;
             Direction = direction;
+            Damage = damage;
         }
 
         #region Move
@@ -49,16 +52,30 @@ namespace Game
                     RemoveFlag = true;
                 else X -= 6;
             }
-            if (ChekIntersection(game))
-            {
-
-            }
+            ChekIntersection(game);
         }
         #endregion
 
-        public bool ChekIntersection(Game game)
+        #region ChekIntersection
+        public void ChekIntersection(Game game)
         {
-            return true;
+            var recB = new Rectangle(X, Y, game.BulletSize, game.BulletSize);
+            foreach(var monster in game.Level.MonsterList)
+            {
+                var recM = new Rectangle(monster.X, monster.Y, game.BlockSize, game.BlockSize);  
+                if(recB.IntersectsWith(recM))
+                {
+                    monster.GetDamage(game);
+                    RemoveFlag = true;
+                }
+            };
+            var recP = new Rectangle(game.Player.X, game.Player.Y, game.BlockSize, game.BlockSize);
+            if (recB.IntersectsWith(recP))
+            {
+                game.Player.GetDamage();
+                RemoveFlag = true;
+            }
         }
+        #endregion
     }
 }

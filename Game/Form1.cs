@@ -14,7 +14,6 @@ namespace Game
 {
     partial class Form1 : Form
     {
-        public Game GameModel;
         private readonly Dictionary<string, Bitmap> Images = new Dictionary<string, Bitmap>();
 
         public Form1(Game Game, DirectoryInfo imagesDirectory = null)
@@ -22,9 +21,6 @@ namespace Game
             InitializeComponent();
             KeyPreview = true;
             DoubleBuffered = true;
-
-            this.GameModel = Game;
-            Player player = Game.Player;
 
             var ammoT = new TextBox()
             {
@@ -47,54 +43,9 @@ namespace Game
             foreach (var e in imagesDirectory.GetFiles("*.png"))
                 Images[e.Name] = (Bitmap)Image.FromFile(e.FullName);
 
-
-            #region KeyDown
-            KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.W)
-                {
-                    player.GoUp = true;
-                }
-                if (e.KeyCode == Keys.A )
-                {
-                    player.GoLeft = true;
-                }
-                if (e.KeyCode == Keys.S)
-                {
-                    player.GoBack = true;
-                }    
-                if (e.KeyCode == Keys.D)
-                {
-                    player.GoRight = true;
-                }
-                if (e.KeyCode == Keys.Space)
-                {
-                    player.Fire(Game);
-                }
-            };
-            #endregion
+            KeyDown += (s, e) => Game.KeyDown(e);
            
-            #region KeyUP
-            KeyUp += (s, e) =>
-            {
-                if (e.KeyCode == Keys.W)
-                {
-                    player.GoUp = false;
-                }
-                if (e.KeyCode == Keys.A)
-                {
-                    player.GoLeft = false;
-                }
-                if (e.KeyCode == Keys.S)
-                {
-                    player.GoBack = false;
-                }
-                if (e.KeyCode == Keys.D)
-                {
-                    player.GoRight = false;
-                }
-            };
-            #endregion
+            KeyUp += (s, e) => Game.KeyUp(e);
 
             #region Paint
             Paint += (sender, args) =>
@@ -117,6 +68,15 @@ namespace Game
                 }
                 #endregion
 
+                #region Player
+                var pb = Images["DoomGuyRight.png"];
+                if (Game.Player.Direction == "Up") pb = Images["DoomGuyUp.png"];
+                if (Game.Player.Direction == "Back") pb = Images["DoomGuyBack.png"];
+                if (Game.Player.Direction == "Right") pb = Images["DoomGuyRight.png"];
+                if (Game.Player.Direction == "Left") pb = Images["DoomGuyLeft.png"];
+                args.Graphics.DrawImage(pb, Game.Player.X, Game.Player.Y);
+                #endregion
+
                 #region Supplies
                 var aid = Images["aid.png"];
                 var ammo = Images["ammo.png"];
@@ -127,15 +87,6 @@ namespace Game
                     if (item.Type == "ammo")
                         args.Graphics.DrawImage(ammo, item.X, item.Y);
                 }
-                #endregion
-
-                #region Player
-                var pb = Images["DoomGuyRight.png"];
-                if (Game.Player.Direction == "Up") pb = Images["DoomGuyUp.png"];
-                if (Game.Player.Direction == "Back") pb = Images["DoomGuyBack.png"];
-                if (Game.Player.Direction == "Right") pb = Images["DoomGuyRight.png"];
-                if (Game.Player.Direction == "Left") pb = Images["DoomGuyLeft.png"];
-                args.Graphics.DrawImage(pb, Game.Player.X, Game.Player.Y);
                 #endregion
 
                 #region Bullets
