@@ -17,8 +17,8 @@ namespace Game
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var model = new Game(Levels.Level1);
-            Application.Run(new Form1(model) { ClientSize = new Size(model.Level.Width*64, model.Level.Height * 64) });
+            var model = new Game(Levels.Level3);
+            Application.Run(new View(model) { ClientSize = new Size(model.Level.Width*64, model.Level.Height * 64) });
         }
     }
 }

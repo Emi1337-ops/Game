@@ -11,19 +11,28 @@ namespace Game
 {
     public class Item
     {
-        public int X;
-        public int Y;
-        public string Type;
+        public int X { get; set; }
+        public int Y { get; set; }
+        public string Type { get; set; }
 
         public bool RemoveFlag = false;
+        public Bitmap Image
+        {
+            get 
+            { 
+                if (Type == "aid") return new Bitmap("Images\\aid.png");
+                else return new Bitmap("Images\\ammo.png");
+
+            }
+        }
 
         delegate void Func(Player player);
-        private Func Help;
+        private Func Help { get; }
 
         public Item(int x, int y, string type)
         {
-            X = x;
-            Y = y;
+            X = x * 64;
+            Y = y * 64;
             Type = type;
             if (type == "aid") Help = Aid;
             if (type == "ammo") Help = Ammo;
