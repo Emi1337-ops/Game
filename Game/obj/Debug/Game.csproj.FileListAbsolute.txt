@@ -8,4 +8,8 @@ D:\Users\source\repos\Game\Game\obj\Debug\Game.csproj.GenerateResource.cache
 D:\Users\source\repos\Game\Game\obj\Debug\Game.csproj.CoreCompileInputs.cache
 D:\Users\source\repos\Game\Game\obj\Debug\Game.exe
 D:\Users\source\repos\Game\Game\obj\Debug\Game.pdb
-D:\Users\source\repos\Game\Game\obj\Debug\Game.View.resources
+D:\Users\source\repos\Game\Game\obj\Debug\Game.MainForm.resources
+D:\Users\source\repos\Game\Game\bin\Debug\Game.exe.manifest
+D:\Users\source\repos\Game\Game\bin\Debug\Game.application
+D:\Users\source\repos\Game\Game\obj\Debug\Game.exe.manifest
+D:\Users\source\repos\Game\Game\obj\Debug\Game.application
