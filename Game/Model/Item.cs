@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Drawing;
 
 namespace Game
 {
@@ -19,9 +12,7 @@ namespace Game
         public Bitmap Image
         {
             get 
-            { 
-                if (Type == "aid") return new Bitmap("Images\\aid.png");
-                else return new Bitmap("Images\\ammo.png");
+            { return new Bitmap($"Images\\{Type}.png");
 
             }
         }
@@ -36,8 +27,8 @@ namespace Game
             Type = type;
             if (type == "aid") Help = Aid;
             if (type == "ammo") Help = Ammo;
-            void Aid(Player player) => player.Hp += 10;
-            void Ammo(Player player) => player.Ammo += 10;
+            void Aid(Player player) => player.Hp += 15;
+            void Ammo(Player player) => player.Ammo += 15;
         }
 
         public void Action(Player player)

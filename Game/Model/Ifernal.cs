@@ -16,7 +16,7 @@ namespace Game
         public int X { get; set; }
         public int Y { get; set; }
 
-        public string Direction = "Right";
+        public string Direction = "Left";
 
         public Bitmap BulletFirst
         {
@@ -32,7 +32,7 @@ namespace Game
         }
 
         public bool RemoveFlag = false;
-        public int Hp = 100;
+        public int Hp = 400;
 
         public readonly int Damage;
 
@@ -63,7 +63,7 @@ namespace Game
         public void Act(Game game)
         {
             TickCount++;
-            if (game.TickCount % 200 == 0)
+            if (TickCount % 250 == 0)
             {
                 Fire(game);
             }

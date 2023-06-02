@@ -15,8 +15,7 @@ namespace Game
         { 
             get 
             { 
-                if (Type == "Dirt") return new Bitmap("Images\\BRICK_1A.png");
-                else return new Bitmap("Images\\BRICK_1A.png");
+                return new Bitmap("Images\\BRICK_1A.png");
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Threading;
 
 namespace Game
 {
@@ -17,8 +18,8 @@ namespace Game
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var model = new Game(Levels.Level3);
-            Application.Run(new View(model) { ClientSize = new Size(model.Level.Width*64, model.Level.Height * 64) });
+            var main = new MainForm();
+            main.Run();
         }
     }
 }

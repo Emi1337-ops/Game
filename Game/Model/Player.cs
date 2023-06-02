@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Threading;
+using Game.Model;
 
 namespace Game
 {
@@ -15,8 +16,9 @@ namespace Game
         private readonly int BlockSize = 64;
         public int X { get; set; }
         public int Y { get; set; }
+
         public string Direction = "Right";
-        public Bitmap BulletType 
+        public Bitmap BulletImage
         {
             get { return new Bitmap("Images\\fireball.png"); } 
         }
@@ -24,7 +26,7 @@ namespace Game
         {
             get { return new Bitmap($"Images\\DoomGuy{Direction}.png"); }
         }
-
+        public MainForm Form { get; set; }
         public int Damage { get; }
         public int Speed { get; set; }
 
@@ -56,7 +58,7 @@ namespace Game
         }
 
         #region Player
-        public Player(int x, int y, string direction, int damage)
+        public Player(int x, int y, string direction, int damage, MainForm form)
         {
             Hp = 100;
             Ammo = 30;
@@ -65,6 +67,7 @@ namespace Game
             Direction = direction;
             Damage = damage;
             Speed = 4;
+            Form = form;
         }
         #endregion
 
@@ -116,7 +119,7 @@ namespace Game
             if (Ammo > 0)
             {
                 game.Level.
-                        Add(new Bullet(X, Y, Direction, Damage, BulletType, 8));
+                        Add(new Bullet(X, Y, Direction, Damage, BulletImage, 8));
                 Ammo--;
             };
         }
@@ -126,17 +129,13 @@ namespace Game
         public void GetDamage()
         {
             Hp -= 10;
-            if (Hp <= 0)
-            {
-                Death();
-            }
         }
         #endregion
 
         #region Death
         public void Death()
         {
-
+            Form.ChangeStage(GameStage.Death);
         }
         #endregion
 

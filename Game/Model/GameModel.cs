@@ -1,43 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Game.Model;
+using Game.Views;
 using System.Windows.Forms;
-using System.Xml.Serialization;
-using System.Drawing;
-using System.Collections.Specialized;
-using System.Security.Policy;
-using System.Windows;
-using Point = System.Drawing.Point;
-using System.IO;
 
 namespace Game
 {
     public class Game
     {
-        public int BlockSize = 64; //все объекты (кроме пуль) имеют одинаковый размер 64*64 пикселя
+        public int BlockSize = 64; //все объекты (кроме снарядов) имеют одинаковый размер 64*64 пикселя
 
         public Level Level { get; set; }
         public Player Player { get; set; }
-
-        public int TickCount = 0;
+        public MainForm Form { get; set; }
 
         #region Game
-        public Game(Level level)
+        public Game(Level level, MainForm form)
         {
             Level = level;
+            Form = form;
             Player = new Player(
                 Level.PlayerStartPosition.X,
                 Level.PlayerStartPosition.Y,
                 "Right",
-                30);
+                30,
+                form);
+            Player.Hp = 100;
+            Player.Ammo = 30;
+ 
         }
         #endregion
 
         #region KeyBoard
         public void KeyDown(KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Form.ChangeStage(GameStage.EscapeMenu);
+            }
             if (e.KeyCode == Keys.W)
             {
                 Player.GoUp = true;
@@ -57,6 +55,10 @@ namespace Game
             if (e.KeyCode == Keys.Space)
             {
                 Player.Fire(this);
+            }
+            if (e.KeyCode == Keys.Escape)
+            {
+
             }
         }
         public void KeyUp(KeyEventArgs e)
@@ -81,14 +83,11 @@ namespace Game
         #endregion
 
         #region Update
-        public void Update()
+        public void Update(GameView view)
         {
-            TickCount++;
-            Level.Update(this);
+            Level.Update(this, view);
             Player.Move(this);
         }
         #endregion
-
-        
     }
 }

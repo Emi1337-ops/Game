@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using System.Security.Policy;
+using Game.Model;
+using Game.Views;
 
 namespace Game
 {
@@ -21,21 +18,30 @@ namespace Game
         public List<Infernal> InfernalRemove = new List<Infernal>();
         public List<Item> ItemRemove = new List<Item>();
         public List<Bullet> BulletRemove = new List<Bullet>();
-
+        
+        public ExitDoor ExitDoor = null;
+        private Point ExitPosition { get; }
 
         public int Width { get; }
         public int Height { get; }
         public Point PlayerStartPosition { get; }
+
+        public Bitmap BackgroundImage
+        { 
+            get { return new Bitmap($"Images\\{BackgroundType}.jpg"); }
+        }
         public string BackgroundType { get; set; }
 
-        public Level(int width, int height, Point position, string backgroundType)
+        public Level(int width, int height, Point position, Point endPosition, string backgroundType)
         {
             Width = width;
             Height = height;
             PlayerStartPosition = position;
             BackgroundType = backgroundType;
+            ExitPosition = endPosition;
         }
 
+        #region Add
         public void Add(Demon monster)
         {
             DemonList.Add(monster);
@@ -56,6 +62,7 @@ namespace Game
         {
             WallList.Add(wall);
         }
+        #endregion
 
         #region UpdateBullets
         public void UpdateBullets(Game game)
@@ -75,10 +82,14 @@ namespace Game
                 {
                     if (bullet.parent != null)
                     {
-                        if (bullet.Direction == "Up" || bullet.Direction == "Back")
-                            bullet.parent.FireSecond(game, bullet.X, bullet.Y, "X");
+                        if (bullet.Direction == "Up")
+                            bullet.parent.FireSecond(game, bullet.X, bullet.Y + bullet.Image.Height/2, "X");
+                        else if (bullet.Direction == "Back")
+                            bullet.parent.FireSecond(game, bullet.X, bullet.Y - bullet.Image.Height/2, "X");
+                        else if (bullet.Direction == "Right")
+                            bullet.parent.FireSecond(game, bullet.X - bullet.Image.Width/2, bullet.Y, "Y");
                         else
-                            bullet.parent.FireSecond(game, bullet.X, bullet.Y, "Y");
+                            bullet.parent.FireSecond(game, bullet.X + bullet.Image.Width/2, bullet.Y, "Y");
                     }
                     BulletList.Remove(bullet);
                 }
@@ -111,7 +122,7 @@ namespace Game
         #endregion
 
         #region UpdateMonsters
-        public void UpdateMonsters(Game game)
+        public void UpdateDemons(Game game)
         {
             if (DemonList != null)
             {
@@ -156,11 +167,46 @@ namespace Game
         }
         #endregion
 
-        public void Update(Game game)
+        #region UpdateExit
+        public void UpdateExit(Game game, GameView view)
         {
+            if (DemonList.Count == 0 && InfernalList.Count == 0)
+                ExitDoor = new ExitDoor(ExitPosition);
+            if (ExitDoor != null)
+            {
+                var recD = new Rectangle(ExitDoor.X, ExitDoor.Y, ExitDoor.Image.Width, ExitDoor.Image.Height);
+                var player = game.Player;
+                var recP = new Rectangle(player.X, player.Y, player.Image.Width, player.Image.Height);
+                if (recD.IntersectsWith(recP))
+                {
+                    if (game.Form.Levels.LevelsList.Count == 0)
+                        game.Form.ChangeStage(GameStage.Finished);
+                    else
+                    {
+                        game.Level = game.Form.GetLevel();
+                        game.Player.X = game.Level.PlayerStartPosition.X * 64;
+                        game.Player.Y = game.Level.PlayerStartPosition.Y * 64;
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region UpdateDeath
+        public void UpdateDeath(Game game, GameView view)
+        {
+            if (game.Player.Hp <= 0)
+                game.Form.ChangeStage(GameStage.Death);
+        }
+        #endregion
+
+        public void Update(Game game, GameView view)
+        {
+            UpdateExit(game, view);
+            UpdateDeath(game, view);
             UpdateBullets(game);
             UpdateItems(game);
-            UpdateMonsters(game);
+            UpdateDemons(game);
             UpdateInfernals(game);
         }
     }

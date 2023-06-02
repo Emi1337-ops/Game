@@ -17,7 +17,7 @@ namespace Game
         private readonly int BlockSize = 64;
         public int X { get; set; }
         public int Y { get; set; }
-        public string Direction = "Right";
+        public string Direction = "Left";
         public string DirectionExtra;
         public readonly int Speed;
         public Bitmap BulletType
@@ -62,50 +62,62 @@ namespace Game
         public void Move(Game game)
         {
             #region ChooseMoveDirection
-                var monsterPoint = new Point(X, Y);
-                var playerPoint = new Point(game.Player.X, game.Player.Y);
-                GoLeft = false;
-                GoBack = false;
-                GoUp = false;
-                GoRight = false;
+            var monsterPoint = new Point(X, Y);
+            var playerPoint = new Point(game.Player.X, game.Player.Y);
+            GoLeft = false;
+            GoBack = false;
+            GoUp = false;
+            GoRight = false;
 
-                var direction = FindDirection(monsterPoint, playerPoint);
-                if (direction == "Up")
+            var direction = FindDirection(monsterPoint, playerPoint);
+            if (direction == "Up")
+            {
+                if (!CanMove(game, IsUpFree))
                 {
-                    if (!CanMove(game, IsUpFree))
+                    if (DirectionExtra == "Right")
                     {
-                        if (DirectionExtra == "Right") GoRight = true;
-                        else GoLeft = true;
+                        if (CanMove(game, IsRightFree))
+                            GoRight = true;
+                        else if (CanMove(game, IsLeftFree))
+                            GoLeft = true;
                     }
-                    else GoUp = true;
                 }
-                if (direction == "Back")
+                else GoUp = true;
+            }
+            if (direction == "Back")
+            {
+                if (!CanMove(game, IsBackFree))
                 {
-                    if (!CanMove(game, IsBackFree))
-                    {
-                        if (DirectionExtra == "Right") GoRight = true;
-                        else GoLeft = true;
-                    }
-                    else GoBack = true;
+                    if (CanMove(game, IsRightFree))
+                        GoRight = true;
+                    else if (CanMove(game, IsLeftFree))
+                        GoLeft = true;
                 }
-                if (direction == "Right")
+                else GoBack = true;
+            }
+
+            if (direction == "Right")
+            {
+                if (!CanMove(game, IsRightFree))
                 {
-                    if (!CanMove(game, IsRightFree))
-                    {
-                        if (DirectionExtra == "Up") GoUp = true;
-                        else GoBack = true;
-                    }
-                    else GoRight = true;
+                    if (CanMove(game, IsUpFree))
+                        GoUp = true;
+                    else if (CanMove(game, IsBackFree))
+                        GoBack = true;
                 }
-                if (direction == "Left")
+                else GoRight = true;
+            }
+            if (direction == "Left")
+            {
+                if (!CanMove(game, IsLeftFree))
                 {
-                    if (!CanMove(game, IsLeftFree))
-                    {
-                        if (DirectionExtra == "Up") GoUp = true;
-                        else GoBack = true;
-                    }
-                    else GoLeft = true;
+                    if (CanMove(game, IsUpFree))
+                        GoUp = true;
+                    else if (CanMove(game, IsBackFree))
+                        GoBack = true;
                 }
+                else GoLeft = true;
+            }
             #endregion
 
             #region Move
@@ -157,7 +169,7 @@ namespace Game
         public void Act(Game game)
         {
             TickCount++;
-            if (game.TickCount % 200 == 0)
+            if (TickCount % 200 == 0)
             {
                 Fire(game);
             }
