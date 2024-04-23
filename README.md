@@ -1,10 +1,11 @@
 Это мой итоговый проект по C# на первом курсе. Это 2D шутер со стилистикой DOOM.
  Было реализовано несколько уровней, имеются разные демоны-враги, а также аптечка и магазин с патронами
 
- ![Снимок экрана (36)](https://github.com/Emi1337-ops/Game/assets/131365798/29eec38e-f3ad-4f7f-a5b9-9618f467471b)
+![Снимок экрана (41)](https://github.com/Emi1337-ops/Game/assets/131365798/6275991f-1a2a-4d5a-9f5e-1ca785a94d9f)
 
 ![Снимок экрана (37)](https://github.com/Emi1337-ops/Game/assets/131365798/5680c624-a08f-4a80-a327-0239f4d6defc)
 
 ![Снимок экрана (38)](https://github.com/Emi1337-ops/Game/assets/131365798/ae9e01ab-e44c-4d2b-a30b-f3ee0e56d3b9)
 
-![Снимок экрана (40)](https://github.com/Emi1337-ops/Game/assets/131365798/2014cf6c-1440-4138-ab1d-ba27c10e079b)
+![Снимок экрана (42)](https://github.com/Emi1337-ops/Game/assets/131365798/6a4fc510-1703-426f-9a5c-dadf48a95be8)
+
